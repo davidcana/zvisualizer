@@ -1,0 +1,31 @@
+{
+  "name": "zvisualizer",
+  "version": "0.1.0-SNAPSHOT",
+  "main": "./js/app/main.js",
+  "description": "A Javascript API to make it easy to visualize audio streams.",
+  "keywords": [
+    "visualize",
+    "audio",
+    "streams"
+  ],
+  "homepage": "https://github.com/davidcana/zvisualizer",
+  "bugs": {
+    "url": "https://github.com/davidcana/zvisualizer/issues"
+  },
+  "license": "LGPL-3.0",
+  "author": "David Cana Lopez",
+  "contributors": [],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/davidcana/zvisualizer.git"
+  },
+  "dependencies": {
+  },
+  "devDependencies": {
+    "http-server": "14.1.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "server": "http-server -p 9000"
+  }
+}

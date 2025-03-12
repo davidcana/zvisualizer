@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>Voice-change-O-matic</title>
+
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+    <link
+      href="https://fonts.googleapis.com/css?family=Righteous|Nova+Square"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <link href="styles/normalize.css" rel="stylesheet" type="text/css" />
+    <link href="styles/app.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Voice-change-O-matic</h1>
+      </header>
+
+      <div>
+          <canvas id="canvas1" class="visualizer" width="640" height="100"></canvas>
+      </div>
+      <div>
+          <canvas id="canvas2" class="visualizer" width="640" height="100"></canvas>
+      </div>
+      <div>
+          <canvas id="canvas3" class="visualizer" width="640" height="100"></canvas>
+      </div>
+      <div>
+          <canvas id="canvas4" class="visualizer" width="640" height="100"></canvas>
+      </div>
+      <div>
+          <canvas id="canvas5" class="visualizer" width="640" height="100"></canvas>
+      </div>
+      <div>
+          <canvas id="canvas6" class="visualizer" width="640" height="100"></canvas>
+      </div>
+
+    <label for="toggle">❔</label>
+    <input type="checkbox" id="toggle" />
+    <aside>
+      <h2>Information</h2>
+
+      <p>Voice-change-O-matic is built using:</p>
+
+      <ul>
+        <li>
+          <a
+            href="https://developer.mozilla.org/en-US/docs/Web/API/Navigator.getUserMedia"
+            >getUserMedia</a
+          >, which is currently supported in Firefox, Opera (desktop/mobile) and
+          Chrome (desktop only.) Firefox requires no prefix; the others require
+          <code>webkit</code> prefixes.
+        </li>
+
+        <li>
+          <a
+            href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API"
+            >Web Audio API</a
+          >, which is currently supported in Firefox, Chrome, Safari
+          (desktop/mobile) and Opera (desktop only). Firefox and Opera require
+          no prefix; Chrome requires <code>webkit</code> prefixes.
+        </li>
+      </ul>
+
+      <button id="install-btn">Install app</button>
+    </aside>
+
+    <!-- The following element pulls in the script for the default template functionality -->
+
+    <script src="js/install.js"></script>
+
+    <!-- Below is your custom application script -->
+
+    <script src="js/app-version1.js"></script>
+  </body>
+</html>
