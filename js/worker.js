@@ -1,25 +1,27 @@
  
 let canvas = null;
+let canvasId = null;
 let visualSetting = null;
 let visualizers = {};
 
 onmessage = function ( e ) {
     console.log( 'Worker: Message received from main script' );
-    const { bufferLength, dataArray, canvas: canvasMessage, visualSetting: visualSettingMessage } = e.data;
+    const { bufferLength, dataArray, canvas: canvasMessage, canvasId: canvasIdMessage, visualSetting: visualSettingMessage } = e.data;
 
     if ( canvasMessage ) {
         canvas = canvasMessage;
+        canvasId = canvasIdMessage;
         visualSetting = visualSettingMessage;
-        console.log( 'Initializing canvas and visualSetting ' + visualSetting );
+        console.log( `Initializing canvas ${canvasId} and visualSetting ${visualSetting}`);
     } else {
         let visualizer = visualizers[ visualSetting ];
         if ( ! visualizer ){
-            console.log( 'Error trying to run drawVisualizer '  + visualSetting + ': not found.');
+            console.log( `Error trying to run drawVisualizer ${visualSetting}: not found.` );
             return;
         }
-        console.log( 'Running drawVisualizer '  + visualSetting );
+        console.log( `Running drawVisualizer ${visualSetting} for canvas ${canvasId}`);
         visualizer( bufferLength, dataArray );
-        console.log( '...drawVisualizer OK.' );
+        console.log( `...drawVisualizer ${visualSetting} for canvas ${canvasId} OK.` );
     }
 };
 
