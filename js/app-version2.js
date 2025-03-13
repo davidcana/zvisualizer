@@ -13,13 +13,14 @@ async function init() {
         .then(( stream ) => {
             const audioCtx = new AudioContext();
             let source = audioCtx.createMediaStreamSource( stream );
-            
+            /*
             let voiceViewer = new VoiceViewer(
                 document.getElementById( 'canvas1' ),
                 source,
                 audioCtx
             );
-            /*
+            */
+            
             for ( let c = 1; c < 7; ++c ){
                 let voiceViewer = new VoiceViewer(
                     document.getElementById( 'canvas' + c ),
@@ -27,7 +28,7 @@ async function init() {
                     audioCtx
                 );
             }
-            */
+            
         })
         .catch( function ( e ) {
             console.error( 'The following gUM error occured: ' + e );
@@ -51,8 +52,8 @@ var VoiceViewer = function ( _canvas, _source, _audioCtx ) {
     //this.canvasCtx = this.canvas.getContext( '2d' );
     
     // Visualize!
-    //this.visualize( 'sinewave' );
-    this.visualize( 'frequencybars' );
+    this.visualize( 'sinewave' );
+    //this.visualize( 'frequencybars' );
     //this.visualize( 'ugly' );
 };
 
@@ -66,7 +67,10 @@ VoiceViewer.prototype.visualize = function( visualSetting ) {
     // Post canvas to worker
     const transferCanvas = this.canvas.transferControlToOffscreen();
     worker.postMessage(
-        { canvas: transferCanvas },
+        { 
+            canvas: transferCanvas,
+            visualSetting
+        },
         [ transferCanvas ]
     );
 
@@ -82,7 +86,7 @@ VoiceViewer.prototype.visualize = function( visualSetting ) {
     }
 };
 
-VoiceViewer.prototype.visualizeUgly = function( worker ) {
+VoiceViewer.prototype.visualizeUgly = function( worker, visualSetting ) {
 
     this.analyser.fftSize = 128; 
     const bufferLength = this.analyser.frequencyBinCount; 

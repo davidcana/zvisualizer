@@ -1,20 +1,29 @@
  
 let canvas = null;
+let visualSetting = null;
+let visualizers = {};
 
 onmessage = function ( e ) {
     console.log( 'Worker: Message received from main script' );
-    const { bufferLength, dataArray, canvas: canvasMessage } = e.data;
+    const { bufferLength, dataArray, canvas: canvasMessage, visualSetting: visualSettingMessage } = e.data;
 
     if ( canvasMessage ) {
         canvas = canvasMessage;
-        console.log( 'Initializing canvas' );
+        visualSetting = visualSettingMessage;
+        console.log( 'Initializing canvas and visualSetting ' + visualSetting );
     } else {
-        drawVisualizer( bufferLength, dataArray );
-        console.log( 'Running drawVisualizer' );
+        let visualizer = visualizers[ visualSetting ];
+        if ( ! visualizer ){
+            console.log( 'Error trying to run drawVisualizer '  + visualSetting + ': not found.');
+            return;
+        }
+        console.log( 'Running drawVisualizer '  + visualSetting );
+        visualizer( bufferLength, dataArray );
+        console.log( '...drawVisualizer OK.' );
     }
 };
 
-const drawVisualizer = ( bufferLength, dataArray ) => {
+visualizers[ 'frequencybars' ] = ( bufferLength, dataArray ) => {
 
     const WIDTH = canvas.width;
     const HEIGHT = canvas.height;
@@ -48,15 +57,11 @@ const drawVisualizer = ( bufferLength, dataArray ) => {
 
     drawFrequencyBars();
 };
-/*
-const drawVisualizer = ( bufferLength, dataArray ) => {
+
+visualizers[ 'sinewave' ] = ( bufferLength, dataArray ) => {
 
     const WIDTH = canvas.width;
     const HEIGHT = canvas.height;
-
-    // We can use Float32Array instead of Uint8Array if we want higher precision
-    // const dataArray = new Float32Array(bufferLength);
-    const dataArray = new Uint8Array( bufferLength );
 
     const canvasCtx = canvas.getContext( '2d' );
     canvasCtx.clearRect( 0, 0, WIDTH, HEIGHT );
@@ -88,9 +93,9 @@ const drawVisualizer = ( bufferLength, dataArray ) => {
     canvasCtx.lineTo( WIDTH, HEIGHT / 2 );
     canvasCtx.stroke();
 };
-*/
-/*
-const drawVisualizer = ( bufferLength, dataArray ) => {
+
+visualizers[ 'ugly' ] = ( bufferLength, dataArray ) => {
+
     let barHeight;
     const barWidth = canvas.width / 2 / bufferLength;
     let firstX = 0;
@@ -116,5 +121,5 @@ const drawVisualizer = ( bufferLength, dataArray ) => {
         secondX += barWidth;
     }
   };
-*/
+
 
