@@ -13,11 +13,16 @@ async function init() {
         .then(( stream ) => {
             const audioCtx = new AudioContext();
             let source = audioCtx.createMediaStreamSource( stream );
+            //const visualSetting = 'frequencybars';
+            const visualSetting = 'sinewave';
+            //const visualSetting = 'ugly';
+
             /*
             let voiceViewer = new VoiceViewer(
                 document.getElementById( 'canvas1' ),
                 source,
-                audioCtx
+                audioCtx,
+                visualSetting
             );
             */
             
@@ -25,7 +30,8 @@ async function init() {
                 let voiceViewer = new VoiceViewer(
                     document.getElementById( 'canvas' + c ),
                     source,
-                    audioCtx
+                    audioCtx,
+                    visualSetting
                 );
             }
             
@@ -35,7 +41,7 @@ async function init() {
         });
 }
 
-var VoiceViewer = function ( _canvas, _source, _audioCtx ) {
+var VoiceViewer = function ( _canvas, _source, _audioCtx, _visualSetting ) {
   
     this.canvas = _canvas;
     this.audioCtx = _audioCtx;
@@ -47,14 +53,9 @@ var VoiceViewer = function ( _canvas, _source, _audioCtx ) {
     this.analyser.smoothingTimeConstant = 0.85;
     _source.connect( this.analyser );
     this.analyser.connect( this.audioCtx.destination );
-
-    // Set up canvas context for visualizer
-    //this.canvasCtx = this.canvas.getContext( '2d' );
     
     // Visualize!
-    this.visualize( 'sinewave' );
-    //this.visualize( 'frequencybars' );
-    //this.visualize( 'ugly' );
+    this.visualize( _visualSetting || 'sinewave' );
 };
 
 VoiceViewer.prototype.visualize = function( visualSetting ) {
@@ -74,19 +75,16 @@ VoiceViewer.prototype.visualize = function( visualSetting ) {
         [ transferCanvas ]
     );
 
-    // Visualize!
-    if ( visualSetting == 'sinewave' ) {
-        this.visualizeSinewave( worker );
-
-    } else if ( visualSetting == 'frequencybars' ) {
-        this.visualizeFrequencyBars( worker );
-
-    } else if ( visualSetting == 'ugly' ) {
-        this.visualizeUgly( worker );
+    // Get the visualizer and run it
+    const visualizer = this.visualizers[ visualSetting ];
+    if ( ! visualizer ){
+        console.log( 'Error trying to run visualizer '  + visualSetting + ': not found.');
+        return;
     }
+    visualizer.call( this, worker );
 };
 
-VoiceViewer.prototype.visualizeUgly = function( worker, visualSetting ) {
+VoiceViewer.prototype.visualizeUgly = function( worker ) {
 
     this.analyser.fftSize = 128; 
     const bufferLength = this.analyser.frequencyBinCount; 
@@ -142,3 +140,8 @@ VoiceViewer.prototype.visualizeFrequencyBars = function( worker ) {
     drawFrequencyBars();
 };
 
+VoiceViewer.prototype.visualizers = {
+    'sinewave': VoiceViewer.prototype.visualizeSinewave,
+    'frequencybars': VoiceViewer.prototype.visualizeFrequencyBars,
+    'ugly': VoiceViewer.prototype.visualizeUgly,
+};
