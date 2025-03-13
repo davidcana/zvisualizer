@@ -13,13 +13,7 @@ async function init() {
         .then(( stream ) => {
             const audioCtx = new AudioContext();
             let source = audioCtx.createMediaStreamSource( stream );
-            /*
-            let voiceViewer = new VoiceViewer(
-                document.querySelector( '.visualizer' ),
-                source,
-                audioCtx
-            );
-            */
+
             for ( let c = 1; c < 7; ++c ){
                 let voiceViewer = new VoiceViewer(
                     document.getElementById( 'canvas' + c ),
@@ -43,24 +37,13 @@ var VoiceViewer = function ( _canvas, _source, _audioCtx ) {
     this.analyser.minDecibels = -90;
     this.analyser.maxDecibels = -10;
     this.analyser.smoothingTimeConstant = 0.85;
-
-    const distortion = this.audioCtx.createWaveShaper();
-    const gainNode = this.audioCtx.createGain();
-    const biquadFilter = this.audioCtx.createBiquadFilter();
-
-    _source.connect( distortion );
-    distortion.connect( biquadFilter );
-    biquadFilter.connect( gainNode );
-    gainNode.connect( this.analyser );
+    _source.connect( this.analyser );
     this.analyser.connect( this.audioCtx.destination );
 
     // Set up canvas context for visualizer
     this.canvasCtx = this.canvas.getContext( '2d' );
 
-    // Set width of canvas
-    //const intendedWidth = document.querySelector( '.wrapper' ).clientWidth;
-    //this.canvas.setAttribute( 'width', intendedWidth );
-
+    // Visualize!
     //this.visualize( 'sinewave' );
     this.visualize( 'frequencybars' );
 };
