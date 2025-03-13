@@ -13,6 +13,8 @@ async function init() {
         .then(( stream ) => {
             const audioCtx = new AudioContext();
             let source = audioCtx.createMediaStreamSource( stream );
+
+            const workerAbsoluteURL = 'http://localhost:9000/js/worker.js';
             //const visualSetting = 'frequencybars';
             const visualSetting = 'sinewave';
             //const visualSetting = 'ugly';
@@ -22,6 +24,7 @@ async function init() {
                 document.getElementById( 'canvas1' ),
                 source,
                 audioCtx,
+                workerAbsoluteURL,
                 visualSetting
             );
             */
@@ -31,6 +34,7 @@ async function init() {
                     document.getElementById( 'canvas' + c ),
                     source,
                     audioCtx,
+                    workerAbsoluteURL,
                     visualSetting
                 );
             }
@@ -41,7 +45,7 @@ async function init() {
         });
 }
 
-var VoiceViewer = function ( _canvas, _source, _audioCtx, _visualSetting ) {
+var VoiceViewer = function ( _canvas, _source, _audioCtx, _workerAbsoluteURL, _visualSetting ) {
   
     this.canvas = _canvas;
     this.audioCtx = _audioCtx;
@@ -55,16 +59,20 @@ var VoiceViewer = function ( _canvas, _source, _audioCtx, _visualSetting ) {
     this.analyser.connect( this.audioCtx.destination );
     
     // Visualize!
-    this.visualize( _visualSetting || 'sinewave' );
+    this.visualize(
+        _workerAbsoluteURL,
+        _visualSetting || 'sinewave'
+    );
 };
 
-VoiceViewer.prototype.visualize = function( visualSetting ) {
+VoiceViewer.prototype.visualize = function( workerAbsoluteURL, visualSetting ) {
 
     console.log( visualSetting );
     
     // Create worker
-    const worker = new Worker( new URL( 'js/worker.js', 'http://localhost:9000/' ) );
-    
+    const worker = new Worker( new URL( workerAbsoluteURL ) );
+    //const worker = new Worker( new URL( 'js/worker.js', 'http://localhost:9000/' ) );
+
     // Post canvas to worker
     const transferCanvas = this.canvas.transferControlToOffscreen();
     worker.postMessage(
