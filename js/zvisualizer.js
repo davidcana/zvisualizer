@@ -125,15 +125,15 @@ VoiceViewer.prototype.visualizeFrequencyBars = function( worker ) {
 
 VoiceViewer.prototype.visualizeVolumeMeter = function( worker ) {
     
-    const pcmData = new Float32Array( this.analyser.fftSize );
-
+    const dataArray = new Float32Array( this.analyser.fftSize );
+    
     const onFrame = () => {
-        this.analyser.getFloatTimeDomainData( pcmData );
+        this.analyser.getFloatTimeDomainData( dataArray );
         let sumSquares = 0.0;
-        for ( const amplitude of pcmData ){
+        for ( const amplitude of dataArray ){
             sumSquares += amplitude * amplitude;
         }
-        this.meter.value = Math.sqrt( sumSquares / pcmData.length );
+        this.meter.value = Math.sqrt( sumSquares / dataArray.length );
         requestAnimationFrame( onFrame );
     };
 

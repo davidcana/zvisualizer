@@ -122,6 +122,5 @@ visualizers[ 'ugly' ] = ( bufferLength, dataArray ) => {
         ctx.fillRect( secondX, canvas.height - barHeight, barWidth, barHeight );
         secondX += barWidth;
     }
-  };
-
+};
 
