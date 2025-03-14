@@ -1,4 +1,4 @@
-import { VoiceViewer } from './zvisualizer.js';
+import { VoiceViewer } from './zvisualizer-meter.js';
 
 const heading = document.querySelector( 'h1' );
 heading.textContent = 'CLICK HERE TO START';
