@@ -16,7 +16,7 @@ async function init() {
             const audioCtx = new AudioContext();
             let source = audioCtx.createMediaStreamSource( stream );
 
-            const numberOfViewers = 1;
+            const numberOfViewers = 6;
             //const visualSetting = 'frequencybars';
             //const visualSetting = 'sinewave';
             //const visualSetting = 'ugly';
