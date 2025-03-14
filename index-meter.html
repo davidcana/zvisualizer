@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>Voice-change-O-matic</title>
+
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+    <link
+      href="https://fonts.googleapis.com/css?family=Righteous|Nova+Square"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <link href="styles/normalize.css" rel="stylesheet" type="text/css" />
+    <link href="styles/app.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Voice-change-O-matic</h1>
+      </header>
+
+      <div>
+          <meter id="volumeMeter1" high="0.25" max="1"></meter>
+      </div>
+      <div>
+          <meter id="volumeMeter2" high="0.25" max="1"></meter>
+      </div>
+      <div>
+          <meter id="volumeMeter3" high="0.25" max="1"></meter>
+      </div>
+      <div>
+          <meter id="volumeMeter4" high="0.25" max="1"></meter>
+      </div>
+      <div>
+          <meter id="volumeMeter5" high="0.25" max="1"></meter>
+      </div>
+      <div>
+          <meter id="volumeMeter6" high="0.25" max="1"></meter>
+      </div>
+
+    <label for="toggle">❔</label>
+    <input type="checkbox" id="toggle" />
+    <aside>
+      <h2>Information</h2>
+
+      <p>Voice-change-O-matic is built using:</p>
+
+      <ul>
+        <li>
+          <a
+            href="https://developer.mozilla.org/en-US/docs/Web/API/Navigator.getUserMedia"
+            >getUserMedia</a
+          >, which is currently supported in Firefox, Opera (desktop/mobile) and
+          Chrome (desktop only.) Firefox requires no prefix; the others require
+          <code>webkit</code> prefixes.
+        </li>
+
+        <li>
+          <a
+            href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API"
+            >Web Audio API</a
+          >, which is currently supported in Firefox, Chrome, Safari
+          (desktop/mobile) and Opera (desktop only). Firefox and Opera require
+          no prefix; Chrome requires <code>webkit</code> prefixes.
+        </li>
+      </ul>
+
+      <button id="install-btn">Install app</button>
+    </aside>
+
+    <!-- The following element pulls in the script for the default template functionality -->
+
+    <script src="js/install.js"></script>
+
+    <!-- Below is your custom application script -->
+
+    <script src="js/app-version2-meter.js" type="module"></script>
+    <script src="js/zvisualizer.js" type="module"></script>
+  </body>
+</html>

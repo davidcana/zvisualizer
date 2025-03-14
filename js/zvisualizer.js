@@ -7,6 +7,7 @@ visualSetting
 export var VoiceViewer = function ( config ) {
   
     this.canvas = config.canvas;
+    this.meter = config.meter;
     this.audioCtx = config.audioCtx;
 
     // Set up the different audio nodes we will use for the app
@@ -23,23 +24,29 @@ export var VoiceViewer = function ( config ) {
 
 VoiceViewer.prototype.visualize = function( visualSetting ) {
 
-    console.log( 'Visualize ' + this.canvas.id + ' canvas: ' + visualSetting );
-    
-    // Create worker
-    const worker = new Worker(
-        new URL( 'worker.js', import.meta.url )
-    );
+    let worker;
 
-    // Post canvas to worker
-    const transferCanvas = this.canvas.transferControlToOffscreen();
-    worker.postMessage(
-        { 
-            canvas: transferCanvas,
-            canvasId: this.canvas.id,
-            visualSetting
-        },
-        [ transferCanvas ]
-    );
+    if ( this.canvas instanceof HTMLCanvasElement ){
+        console.log( 'Visualize ' + this.canvas.id + ' canvas: ' + visualSetting );
+        
+        // Create worker
+        worker = new Worker(
+            new URL( 'worker.js', import.meta.url )
+        );
+
+        // Post canvas to worker
+        const transferCanvas = this.canvas.transferControlToOffscreen();
+        worker.postMessage(
+            { 
+                canvas: transferCanvas,
+                canvasId: this.canvas.id,
+                visualSetting
+            },
+            [ transferCanvas ]
+        );
+    } else if ( this.meter instanceof HTMLMeterElement ){
+        console.log( 'Visualize ' + this.meter.id + ' meter: ' + visualSetting );
+    }
 
     // Get the visualizer and run it
     const visualizer = this.visualizers[ visualSetting ];
@@ -106,9 +113,27 @@ VoiceViewer.prototype.visualizeFrequencyBars = function( worker ) {
     drawFrequencyBars();
 };
 
+VoiceViewer.prototype.visualizeVolumeMeter = function( worker ) {
+    
+    const pcmData = new Float32Array( this.analyser.fftSize );
+
+    const onFrame = () => {
+        this.analyser.getFloatTimeDomainData( pcmData );
+        let sumSquares = 0.0;
+        for ( const amplitude of pcmData ){
+            sumSquares += amplitude * amplitude;
+        }
+        this.meter.value = Math.sqrt( sumSquares / pcmData.length );
+        requestAnimationFrame( onFrame );
+    };
+
+    requestAnimationFrame( onFrame );
+};
+
 VoiceViewer.prototype.visualizers = {
     'sinewave': VoiceViewer.prototype.visualizeSinewave,
     'frequencybars': VoiceViewer.prototype.visualizeFrequencyBars,
     'ugly': VoiceViewer.prototype.visualizeUgly,
+    'volumeMeter': VoiceViewer.prototype.visualizeVolumeMeter
 };
 
