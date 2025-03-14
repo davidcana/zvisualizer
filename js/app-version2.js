@@ -24,7 +24,7 @@ async function init() {
             for ( let c = 1; c <= numberOfViewers; ++c ){
                 let voiceViewer = new VoiceViewer(
                     {
-                        canvas: document.getElementById( 'canvas' + c ),
+                        el: document.getElementById( 'canvas' + c ),
                         source: source,
                         audioCtx: audioCtx,
                         visualSetting: visualSetting
@@ -34,6 +34,6 @@ async function init() {
             
         })
         .catch( function ( e ) {
-            console.error( 'The following gUM error occured: ' + e );
+            console.error( 'The following error occured: ' + e );
         });
 }

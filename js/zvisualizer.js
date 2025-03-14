@@ -1,14 +1,15 @@
 /*
-canvas
+el
 source
 audioCtx
 visualSetting
 */
 export var VoiceViewer = function ( config ) {
   
-    this.canvas = config.canvas;
-    this.meter = config.meter;
+    // Init some vars
+    this.el = config.el;
     this.audioCtx = config.audioCtx;
+    this.visualSetting = config.visualSetting || 'sinewave';
 
     // Set up the different audio nodes we will use for the app
     this.analyser = this.audioCtx.createAnalyser();
@@ -17,41 +18,50 @@ export var VoiceViewer = function ( config ) {
     this.analyser.smoothingTimeConstant = 0.85;
     config.source.connect( this.analyser );
     this.analyser.connect( this.audioCtx.destination );
+
+    // Create worker
+    const worker = new Worker(
+        new URL( 'worker.js', import.meta.url )
+    );
     
+    // Init canvas or meter
+    this.initElements( worker );
+
     // Visualize!
-    this.visualize( config.visualSetting || 'sinewave' );
+    this.visualize( worker );
 };
 
-VoiceViewer.prototype.visualize = function( visualSetting ) {
+VoiceViewer.prototype.initElements = function( worker ) {
 
-    let worker;
-
-    if ( this.canvas instanceof HTMLCanvasElement ){
-        console.log( 'Visualize ' + this.canvas.id + ' canvas: ' + visualSetting );
+    if ( this.el instanceof HTMLCanvasElement ){
+        // Init canvas
+        this.canvas = this.el;
+        console.log( 'Visualize ' + this.canvas.id + ' canvas: ' + this.visualSetting );
         
-        // Create worker
-        worker = new Worker(
-            new URL( 'worker.js', import.meta.url )
-        );
-
         // Post canvas to worker
         const transferCanvas = this.canvas.transferControlToOffscreen();
         worker.postMessage(
             { 
                 canvas: transferCanvas,
                 canvasId: this.canvas.id,
-                visualSetting
+                visualSetting: this.visualSetting
             },
             [ transferCanvas ]
         );
-    } else if ( this.meter instanceof HTMLMeterElement ){
-        console.log( 'Visualize ' + this.meter.id + ' meter: ' + visualSetting );
+
+    } else if ( this.el instanceof HTMLMeterElement ){
+        // Init meter
+        this.meter = this.el;
+        console.log( 'Visualize ' + this.meter.id + ' meter: ' + this.visualSetting );
     }
+};
+
+VoiceViewer.prototype.visualize = function( worker ) {
 
     // Get the visualizer and run it
-    const visualizer = this.visualizers[ visualSetting ];
+    const visualizer = this.visualizers[ this.visualSetting ];
     if ( ! visualizer ){
-        console.log( 'Error trying to run visualizer '  + visualSetting + ': not found.');
+        console.log( 'Error trying to run visualizer '  + this.visualSetting + ': not found.');
         return;
     }
     visualizer.call( this, worker );
