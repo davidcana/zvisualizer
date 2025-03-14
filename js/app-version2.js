@@ -15,16 +15,18 @@ async function init() {
             let source = audioCtx.createMediaStreamSource( stream );
 
             const numberOfViewers = 1;
-            //const visualSetting = 'frequencybars';
-            const visualSetting = 'sinewave';
+            const visualSetting = 'frequencybars';
+            //const visualSetting = 'sinewave';
             //const visualSetting = 'ugly';
             
             for ( let c = 1; c <= numberOfViewers; ++c ){
                 let voiceViewer = new VoiceViewer(
-                    document.getElementById( 'canvas' + c ),
-                    source,
-                    audioCtx,
-                    visualSetting
+                    {
+                        canvas: document.getElementById( 'canvas' + c ),
+                        source: source,
+                        audioCtx: audioCtx,
+                        visualSetting: visualSetting
+                    }
                 );
             }
             
@@ -34,21 +36,27 @@ async function init() {
         });
 }
 
-var VoiceViewer = function ( _canvas, _source, _audioCtx, _visualSetting ) {
+/*
+canvas
+source
+audioCtx
+visualSetting
+*/
+var VoiceViewer = function ( config ) {
   
-    this.canvas = _canvas;
-    this.audioCtx = _audioCtx;
+    this.canvas = config.canvas;
+    this.audioCtx = config.audioCtx;
 
     // Set up the different audio nodes we will use for the app
     this.analyser = this.audioCtx.createAnalyser();
     this.analyser.minDecibels = -90;
     this.analyser.maxDecibels = -10;
     this.analyser.smoothingTimeConstant = 0.85;
-    _source.connect( this.analyser );
+    config.source.connect( this.analyser );
     this.analyser.connect( this.audioCtx.destination );
     
     // Visualize!
-    this.visualize( _visualSetting || 'sinewave' );
+    this.visualize( config.visualSetting || 'sinewave' );
 };
 
 VoiceViewer.prototype.visualize = function( visualSetting ) {
