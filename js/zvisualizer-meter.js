@@ -57,13 +57,22 @@ VoiceViewer.prototype.visualizeVolumeMeter = function( worker ) {
             sumSquares += amplitude * amplitude;
         }
         this.meter.value = Math.sqrt( sumSquares / dataArray.length );
-        requestAnimationFrame( onFrame );
+        this.request = requestAnimationFrame( onFrame );
     };
 
-    requestAnimationFrame( onFrame );
+    this.request = requestAnimationFrame( onFrame );
 };
 
 VoiceViewer.prototype.visualizers = {
     'volumeMeter': VoiceViewer.prototype.visualizeVolumeMeter
+};
+
+VoiceViewer.prototype.mute = function() {
+    cancelAnimationFrame( this.request );
+    this.meter.value = 0;
+};
+
+VoiceViewer.prototype.unmute = function() {
+    this.visualize();
 };
 

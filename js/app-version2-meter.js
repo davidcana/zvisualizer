@@ -3,6 +3,7 @@ import { VoiceViewer } from './zvisualizer-meter.js';
 const heading = document.querySelector( 'h1' );
 heading.textContent = 'CLICK HERE TO START';
 document.body.addEventListener( 'click', init );
+const voiceViewers = [];
 
 async function init() {
     alert( 'app-version2' );
@@ -23,7 +24,7 @@ async function init() {
             const visualSetting = 'volumeMeter';
 
             for ( let c = 1; c <= numberOfViewers; ++c ){
-                let voiceViewer = new VoiceViewer(
+                voiceViewers[ c ] = new VoiceViewer(
                     {
                         el: document.getElementById( 'volumeMeter' + c ),
                         source: source,
@@ -38,3 +39,22 @@ async function init() {
             console.error( 'The following error occured: ' + e );
         });
 }
+
+// Mute/unmute buttons
+const muteElements = document.querySelectorAll( 'button.mute' );
+muteElements.forEach( el => el.addEventListener( 'click', event => {
+    const mute = event.target;
+    const reference = mute.getAttribute( 'data-reference' );
+    const voiceViewer = voiceViewers[ reference ];
+
+    if ( mute.innerHTML == "Mute" ) {
+        alert( `Mute mute${reference}` );
+        voiceViewer.mute();
+        mute.innerHTML = "Unmute";
+    } else {
+        alert( `Unmute mute${reference}` );
+        voiceViewer.unmute();
+        mute.innerHTML = "Mute";
+    }
+}));
+
