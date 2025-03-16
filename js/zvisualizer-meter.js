@@ -4,7 +4,7 @@ source
 audioCtx
 visualSetting
 */
-export var VoiceViewer = function ( config ) {
+export var ZVisualizer = function ( config ) {
   
     // Init some vars
     this.el = config.el;
@@ -26,7 +26,7 @@ export var VoiceViewer = function ( config ) {
     this.visualize();
 };
 
-VoiceViewer.prototype.initElements = function() {
+ZVisualizer.prototype.initElements = function() {
 
     if ( this.el instanceof HTMLMeterElement ){
         // Init meter
@@ -35,7 +35,7 @@ VoiceViewer.prototype.initElements = function() {
     }
 };
 
-VoiceViewer.prototype.visualize = function() {
+ZVisualizer.prototype.visualize = function() {
 
     // Get the visualizer and run it
     const visualizer = this.visualizers[ this.visualSetting ];
@@ -46,7 +46,7 @@ VoiceViewer.prototype.visualize = function() {
     visualizer.call( this );
 };
 
-VoiceViewer.prototype.visualizeVolumeMeter = function( worker ) {
+ZVisualizer.prototype.visualizeVolumeMeter = function() {
     
     const dataArray = new Float32Array( this.analyser.fftSize );
     
@@ -63,16 +63,16 @@ VoiceViewer.prototype.visualizeVolumeMeter = function( worker ) {
     this.request = requestAnimationFrame( onFrame );
 };
 
-VoiceViewer.prototype.visualizers = {
-    'volumeMeter': VoiceViewer.prototype.visualizeVolumeMeter
+ZVisualizer.prototype.visualizers = {
+    'volumeMeter': ZVisualizer.prototype.visualizeVolumeMeter
 };
 
-VoiceViewer.prototype.mute = function() {
+ZVisualizer.prototype.mute = function() {
     cancelAnimationFrame( this.request );
     this.meter.value = 0;
 };
 
-VoiceViewer.prototype.unmute = function() {
+ZVisualizer.prototype.unmute = function() {
     this.visualize();
 };
 

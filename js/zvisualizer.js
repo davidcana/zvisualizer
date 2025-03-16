@@ -4,7 +4,7 @@ source
 audioCtx
 visualSetting
 */
-export var VoiceViewer = function ( config ) {
+export var ZVisualizer = function ( config ) {
   
     // Init some vars
     this.el = config.el;
@@ -31,7 +31,7 @@ export var VoiceViewer = function ( config ) {
     this.visualize( worker );
 };
 
-VoiceViewer.prototype.initElements = function( worker ) {
+ZVisualizer.prototype.initElements = function( worker ) {
 
     if ( this.el instanceof HTMLCanvasElement ){
         // Init canvas
@@ -56,7 +56,7 @@ VoiceViewer.prototype.initElements = function( worker ) {
     }
 };
 
-VoiceViewer.prototype.visualize = function( worker ) {
+ZVisualizer.prototype.visualize = function( worker ) {
 
     // Get the visualizer and run it
     const visualizer = this.visualizers[ this.visualSetting ];
@@ -67,7 +67,7 @@ VoiceViewer.prototype.visualize = function( worker ) {
     visualizer.call( this, worker );
 };
 
-VoiceViewer.prototype.visualizeUgly = function( worker ) {
+ZVisualizer.prototype.visualizeUgly = function( worker ) {
 
     this.analyser.fftSize = 128; 
     const bufferLength = this.analyser.frequencyBinCount; 
@@ -83,7 +83,7 @@ VoiceViewer.prototype.visualizeUgly = function( worker ) {
     drawUgly();
 };
 
-VoiceViewer.prototype.visualizeSinewave = function( worker ) {
+ZVisualizer.prototype.visualizeSinewave = function( worker ) {
 
     this.analyser.fftSize = 2048;
     const bufferLength = this.analyser.fftSize;
@@ -102,7 +102,7 @@ VoiceViewer.prototype.visualizeSinewave = function( worker ) {
     drawSinewave();
 };
 
-VoiceViewer.prototype.visualizeFrequencyBars = function( worker ) {
+ZVisualizer.prototype.visualizeFrequencyBars = function( worker ) {
 
     this.analyser.fftSize = 256;
 
@@ -123,7 +123,7 @@ VoiceViewer.prototype.visualizeFrequencyBars = function( worker ) {
     drawFrequencyBars();
 };
 
-VoiceViewer.prototype.visualizeVolumeMeter = function( worker ) {
+ZVisualizer.prototype.visualizeVolumeMeter = function( worker ) {
     
     const dataArray = new Float32Array( this.analyser.fftSize );
     
@@ -140,10 +140,10 @@ VoiceViewer.prototype.visualizeVolumeMeter = function( worker ) {
     requestAnimationFrame( onFrame );
 };
 
-VoiceViewer.prototype.visualizers = {
-    'sinewave': VoiceViewer.prototype.visualizeSinewave,
-    'frequencybars': VoiceViewer.prototype.visualizeFrequencyBars,
-    'ugly': VoiceViewer.prototype.visualizeUgly,
-    'volumeMeter': VoiceViewer.prototype.visualizeVolumeMeter
+ZVisualizer.prototype.visualizers = {
+    'sinewave': ZVisualizer.prototype.visualizeSinewave,
+    'frequencybars': ZVisualizer.prototype.visualizeFrequencyBars,
+    'ugly': ZVisualizer.prototype.visualizeUgly,
+    'volumeMeter': ZVisualizer.prototype.visualizeVolumeMeter
 };
 

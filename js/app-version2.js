@@ -1,4 +1,4 @@
-import { VoiceViewer } from './zvisualizer.js';
+import { ZVisualizer } from './zvisualizer.js';
 
 const heading = document.querySelector( 'h1' );
 heading.textContent = 'CLICK HERE TO START';
@@ -22,7 +22,7 @@ async function init() {
             //const visualSetting = 'ugly';
             
             for ( let c = 1; c <= numberOfViewers; ++c ){
-                let voiceViewer = new VoiceViewer(
+                let zvisualizer = new ZVisualizer(
                     {
                         el: document.getElementById( 'canvas' + c ),
                         source: source,

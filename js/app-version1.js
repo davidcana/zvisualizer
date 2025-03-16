@@ -15,7 +15,7 @@ async function init() {
             let source = audioCtx.createMediaStreamSource( stream );
 
             for ( let c = 1; c < 7; ++c ){
-                let voiceViewer = new VoiceViewer(
+                let ZVisualizer = new ZVisualizer(
                     document.getElementById( 'canvas' + c ),
                     source,
                     audioCtx
@@ -27,7 +27,7 @@ async function init() {
         });
 }
 
-var VoiceViewer = function ( _canvas, _source, _audioCtx ) {
+var ZVisualizer = function ( _canvas, _source, _audioCtx ) {
   
     this.canvas = _canvas;
     this.audioCtx = _audioCtx;
@@ -48,7 +48,7 @@ var VoiceViewer = function ( _canvas, _source, _audioCtx ) {
     this.visualize( 'frequencybars' );
 };
 
-VoiceViewer.prototype.visualize = function( visualSetting ) {
+ZVisualizer.prototype.visualize = function( visualSetting ) {
 
     console.log( visualSetting );
 
@@ -60,7 +60,7 @@ VoiceViewer.prototype.visualize = function( visualSetting ) {
     }
 };
 
-VoiceViewer.prototype.visualizeSinewave = function() {
+ZVisualizer.prototype.visualizeSinewave = function() {
 
     const WIDTH = this.canvas.width;
     const HEIGHT = this.canvas.height;
@@ -110,7 +110,7 @@ VoiceViewer.prototype.visualizeSinewave = function() {
     drawSinewave();
 };
 
-VoiceViewer.prototype.visualizeFrequencyBars = function() {
+ZVisualizer.prototype.visualizeFrequencyBars = function() {
 
     const WIDTH = this.canvas.width;
     const HEIGHT = this.canvas.height;
